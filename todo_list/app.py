@@ -83,6 +83,10 @@ def edit_task():
     global tasks
     print("Editing existing task")
     task_edit_id = input("Enter the id of the task to edit: ")
+    if not tasks.__contains__(task_edit_id):
+        print("Invalid id")
+        edit_task()
+        return
     selected = tasks[task_edit_id]
     edit_option = input("If you want to edit the title enter 't' or to edit the status enter 's': ")
     if edit_option == 's':
@@ -98,6 +102,10 @@ def delete_task():
     global tasks
     print("Deleting task")
     task_delete_id = input("Enter the id of the task to delete: ")
+    if not tasks.__contains__(task_delete_id):
+        print("Invalid id")
+        delete_task()
+        return
     tasks[task_delete_id].delete()
 
 #running segment   
