@@ -46,7 +46,6 @@ def app_opened():
         global tasks
         with open('todos.json', 'r') as file:
             raw_data = json.load(file)
-            # print(json.loads(file.read()))
         print("Current tasks in the todo list")
         tasks = {}
         for key, val in raw_data.items():
@@ -59,7 +58,6 @@ def app_opened():
 
 def running():
     app_opened()
-    # global tasks
     option = int(input("Enter '1' to add new task\nEnter '2' to update existing tasks\nEnter '3' to delete task\nEnter '4' to exit\n"))
     if option == 1:
         add_new_task()
