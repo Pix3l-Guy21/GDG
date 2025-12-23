@@ -1,4 +1,5 @@
 import json
+from modules import delete_prompt, opened_prompt, add_new_prompt, edit_prompt
 tasks = {}
 class Tasks:
 
@@ -41,72 +42,20 @@ class Tasks:
         self.write_to_json()
         return "task deleted"
 
-def app_opened():
-    try:
-        global tasks
-        with open('todos.json', 'r') as file:
-            raw_data = json.load(file)
-        print("Current tasks in the todo list")
-        tasks = {}
-        for key, val in raw_data.items():
-            task_obj = Tasks(val["id"], val["title"], val["status"])
-            tasks[key] = task_obj
-            print(f'-----------------------------\ntask id: {task_obj.id}\ntitle: {task_obj.title}\nstatus: {task_obj.status}\n-----------------------------')
-        print()
-    except:
-        print("No todo list found")
-
 def running():
-    app_opened()
+    opened_prompt.app_opened(Tasks, tasks)
     option = int(input("Enter '1' to add new task\nEnter '2' to update existing tasks\nEnter '3' to delete task\nEnter '4' to exit\n"))
     if option == 1:
-        add_new_task()
+        add_new_prompt.add_new_task(Tasks)
         return running()
     elif option == 2:
-        edit_task()
+        edit_prompt.edit_task(tasks)
         return running()
     elif option == 3:
-        delete_task()
+        delete_prompt.delete_task(tasks)
         return running()
     elif option == 4:
         return
-
-def add_new_task():
-    print("Enter task details")
-    new_task_id = int(input("Enter new task id: "))
-    new_task_title = input("Enter new task title: ")
-    new_task_status = "Started"
-    task = Tasks(new_task_id, new_task_title, new_task_status)
-    print(task.save())
-
-def edit_task():
-    global tasks
-    print("Editing existing task")
-    task_edit_id = input("Enter the id of the task to edit: ")
-    if not tasks.__contains__(task_edit_id):
-        print("Invalid id")
-        edit_task()
-        return
-    selected = tasks[task_edit_id]
-    edit_option = input("If you want to edit the title enter 't' or to edit the status enter 's': ")
-    if edit_option == 's':
-        edited_status = input("enter the new status: ")
-        print(selected.update(selected.title, edited_status))
-    elif edit_option == 't':
-        edited_title = input("enter new title: ")
-        print(selected.update(edited_title, selected.status))
-    else:
-        print("incorrect input")
-
-def delete_task():
-    global tasks
-    print("Deleting task")
-    task_delete_id = input("Enter the id of the task to delete: ")
-    if not tasks.__contains__(task_delete_id):
-        print("Invalid id")
-        delete_task()
-        return
-    tasks[task_delete_id].delete()
 
 #running segment   
 print("         ********************************************")
