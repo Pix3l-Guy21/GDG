@@ -3,7 +3,10 @@ from django.views import View
 from django.http import JsonResponse
 from .models import Book, Author
 import json
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
+@method_decorator(csrf_exempt, name='dispatch')
 class BookView(View):
     def get(self, request, book_id=None):
         if book_id:
@@ -22,7 +25,19 @@ class BookView(View):
     
     def post(self, request):
         data = json.loads(request.body)
-        book = Book.objects.create(title = data['title'], author = data['author'], published_date = data['published_date'], isbn = data['isbn'])
+        try:
+            author_obj = Author.objects.get(id=data['author'])
+            book = Book.objects.create(
+                title=data['title'], 
+                author=author_obj, 
+                published_date=data['published_date'], 
+                isbn=data['isbn']
+            )
+        except Author.DoesNotExist:
+            return JsonResponse({"error": "Author not found"}, status=404)
+        except KeyError as e:
+            return JsonResponse({"error": f"Missing field: {str(e)}"}, status=400)
+        
         return JsonResponse({"message": "Book created", "id": book.id}, status=201)
     
     def delete(self, request, book_id):
@@ -30,6 +45,7 @@ class BookView(View):
         book.delete()
         return JsonResponse({"message": "Book deleted"}, status=204)
 
+@method_decorator(csrf_exempt, name='dispatch')
 class AuthorView(View):
     def get(self, request, author_id=None):
         if author_id:
