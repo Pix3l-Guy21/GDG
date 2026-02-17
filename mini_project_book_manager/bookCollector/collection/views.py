@@ -21,6 +21,7 @@ class BookView(View):
         book.title = data.get('title', book.title)
         book.published_date = data.get('published_date', book.published_date.isoformat())
         book.isbn = data.get('isbn', book.isbn)
+        book.save()
         return JsonResponse({"message": "Book updated"})
     
     def post(self, request):
@@ -64,6 +65,7 @@ class AuthorView(View):
         data = json.loads(request.body)
         author.name = data.get('name', author.name)
         author.bio = data.get('bio', author.bio)
+        author.save()
         return JsonResponse({"message": "Author updated"})
     
     def delete(self, request, author_id):
