@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>manager office</title>
+</head>
+<body>
+    <div class="lounge-greeting">
+        {% if user.is_authenticated %}
+            <h2>Welcome to your office, {{ user.username }}!</h2>
+        {% else %}
+            <h2>Welcome to the lounge, Guest!</h2>
+        {% endif %}
+    </div>
+</body>
+</html>

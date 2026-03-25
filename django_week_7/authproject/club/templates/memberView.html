@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member view</title>
+</head>
+<body>
+    <div class="lounge-greeting">
+        {% if user.is_authenticated %}
+            <h2>Welcome to the lounge, {{ user.username }}!</h2>
+            <p>Current User: {{ user.username }}</p>
+<p>User Permissions: {{ perms.club }}</p>
+        {% else %}
+            <h2>Welcome to the lounge, Guest!</h2>
+        {% endif %}
+    </div>
+</body>
+</html>
